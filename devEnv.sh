@@ -63,5 +63,5 @@ cd $script_dir
 copy_dir_local .config/ nvim/ $HOME/.config
 copy_dir_local .config/ yabai/ $HOME/.config
 copy_dir_local .config/ skhd/ $HOME/.config
-copy_file .config/katanarc  $HOME/.config
+copy_file .config/kanatarc  $HOME/.config
 
