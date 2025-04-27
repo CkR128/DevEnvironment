@@ -22,8 +22,8 @@ vim.keymap.set("n", "Q", "<nop>")
 
 vim.keymap.set("n", "<leader><C-R>", "sp <CR> :term python % <CR>")
 
-vim.keymap.set("n", "G", 'gg', { noremap = true})
-vim.keymap.set("n", "gg", 'G', { noremap = true})
+vim.keymap.set({"n", "v"}, "G", 'gg', { noremap = true})
+vim.keymap.set({"n", "v"}, "gg", 'G', { noremap = true})
 
 local bufopts = { noremap = true, silent = true, buffer = bufnr }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts, { desc = "Open [E]rror." })
