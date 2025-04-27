@@ -1,0 +1,90 @@
+local x = ""
+-- -- Reserve a space in the gutter
+-- -- This will avoid an annoying layout shift in the screen
+-- vim.opt.signcolumn = 'yes'
+-- 
+-- -- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- -- This should be executed before you configure any language server
+-- local lspconfig_defaults = require('lspconfig').util.default_config
+-- lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+--     'force',
+--     lspconfig_defaults.capabilities,
+--     require('cmp_nvim_lsp').default_capabilities()
+-- )
+-- 
+-- -- This is where you enable features that only work
+-- -- if there is a language server active in the file
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--     desc = 'LSP actions',
+--     callback = function(event)
+--         local opts = {buffer = event.buf}
+--         local client = vim.lsp.get_client_by_id(event.data.client_id)
+--         vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { buffer = event.buf, desc = "LSP Hover" })
+--         vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', { buffer = event.buf, desc = "[G]o [D]efinition" })
+--         vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { buffer = event.buf, desc = "[G]o [D]eclaration" })
+--         vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { buffer = event.buf, desc = "[G]o Implementation" })
+--         vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', { buffer = event.buf, desc = "[G][O] type definition" })
+--         vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', { buffer = event.buf, desc = "[G]o [R]eferences" })
+--         vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', { buffer = event.buf, desc = "[G]o [S]ignature" })
+--         vim.keymap.set('n', '<leader>LRS', '<cmd>lua vim.lsp.buf.rename()<cr>', { buffer = event.buf, desc = "[L]sp [R]ename [S]ymbol" })
+--         vim.keymap.set({'n', 'x'}, '<leader>LF', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', { buffer = event.buf, desc = "[L]sp [F]ormat Selection" })
+--         vim.keymap.set('n', '<leader>gh', '<cmd>lua vim.lsp.buf.code_action()<cr>', { buffer = event.buf, desc = "Code Action" })
+--         vim.keymap.set('i', '<C-k>', function()
+--           vim.lsp.buf.signature_help()
+--         end, { buffer = event.buf, desc = "" })
+--     end,
+-- })
+-- 
+-- 
+-- require'lspconfig'.jedi_language_server.setup{
+--     filetypes = {
+--         "python"
+--     }
+-- }
+-- 
+-- local lspconfig = require('lspconfig')
+-- 
+-- lspconfig.lua_ls.setup({})
+-- lspconfig.eslint.setup({
+--     filetypes = {
+--         "javascript",
+--         "typescript",
+--         "svelte"
+--     },
+--     on_attach = function(client, bufnr)
+--         vim.api.nvim_create_autocmd("BufWritePre", {
+--             buffer = bufnr,
+--             command = "EslintFixAll",
+--         })
+--     end,
+-- })
+-- 
+-- lspconfig.ts_ls.setup{
+--   filetypes = {
+--     "javascript",
+--     "typescript",
+--     "vue",
+--     "svelte"
+--   },
+-- }
+-- 
+-- local cmp = require('cmp')
+-- cmp.setup({
+--     sources = {
+--         {name = 'nvim_lsp'},
+--         { name = "nvim_lsp_signature_help" },
+--     },
+--     snippet = {
+--         expand = function(args)
+--             -- You need Neovim v0.10 to use vim.snippet
+--             vim.snippet.expand(args.body)
+--         end,
+--     },
+--     mapping = cmp.mapping.preset.insert({
+--         ['<C-y>'] = cmp.mapping.confirm({select = true}),
+--         ['<C-Space>'] = cmp.mapping.complete(),
+--     }),
+-- })
+-- 
+-- 
+-- lspconfig.svelte.setup{}
