@@ -26,7 +26,10 @@ execute() {
     "$@"
 }
 
-cd $scrip_dir
+if [ ! -d "$HOME/.config" ]; then
+    execute mkdir -p "$HOME/.config"
+fi
+
 copy_dir() {
     pushd $1
     to=$2
@@ -35,6 +38,17 @@ copy_dir() {
         execute rm -rf $to/$dir
         execute cp -r $dir $to/dir
     done
+    popd
+}
+
+copy_dir_local() {
+    pushd $1
+    localdir=$2
+    to=$3
+    dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
+    execute rm -rf $to/$localdir
+    execute cp -r $localdir $to/$localdir
+    popd
 }
 
 copy_file() {
@@ -45,5 +59,9 @@ copy_file() {
     execute cp $from $to/$name
 }
 
-# copy_dir .config $XDG_CONFIG_HOME
+cd $script_dir
+copy_dir_local .config/ nvim/ $HOME/.config
+copy_dir_local .config/ yabai/ $HOME/.config
+copy_dir_local .config/ skhd/ $HOME/.config
+copy_file .config/katanarc  $HOME/.config
 
