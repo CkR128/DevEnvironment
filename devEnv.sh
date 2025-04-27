@@ -36,7 +36,7 @@ copy_dir() {
     dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
     for dir in $dirs; do
         execute rm -rf $to/$dir
-        execute cp -r $dir $to/dir
+        execute cp -r $dir $to/$dir
     done
     popd
 }
@@ -63,5 +63,7 @@ cd $script_dir
 copy_dir_local .config/ nvim/ $HOME/.config
 copy_dir_local .config/ yabai/ $HOME/.config
 copy_dir_local .config/ skhd/ $HOME/.config
+copy_dir .local/ $HOME/.local
 copy_file .config/kanatarc  $HOME/.config
-
+copy_file  ./.zprofile  $HOME
+copy_file  ./.tmux.conf  $HOME
