@@ -4,5 +4,8 @@ if [[ -x ".ready-tmux" ]]; then
 	./.ready-tmux
 elif [[ -x "~/.ready-tmux" ]]; then
 	~/.ready-tmux
+else
+    echo "No executable ready-tmux script found in HOME or local directory."
+    exit 0
 fi
 clear
