@@ -69,3 +69,5 @@ execute chmod -R u+x $HOME/.local/scripts
 copy_file .config/kanatarc  $HOME/.config
 copy_file  ./.zprofile  $HOME
 copy_file  ./.tmux.conf  $HOME
+copy_file  ./.ready-tmux $HOME
+execute chmod u+x $HOME/.ready-tmux
