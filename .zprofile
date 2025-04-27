@@ -29,9 +29,4 @@ addToPath() {
 
 addToPath $HOME/.local/scripts
 
-tmux-sessionizer() {
-	source /Users/cameron/.local/scripts/tmux-sessionizer
-}
-zle -N tmux-sessionizer
-
-bindkey '^f' tmux-sessionizer
+bindkey -s '^f' 'tmux-sessionizer\n'
