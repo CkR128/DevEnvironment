@@ -21,6 +21,21 @@ if tmux has-session -t=$selected_name 2> /dev/null; then
 fi
 
 tmux new-session -ds $selected_name -c $selected
-switch_to
+
+timeout=10
+start_time=$SECONDS
+while ! tmux has-session -t="$selected_name" 2>/dev/null; do
+    totalTime=$(SECONDS - start_time)
+
+  if (( SECONDS - start_time >= timeout )); then
+    echo "Timeout reached while waiting for tmux session '$selected_name'. Exiting."
+    exit 1  # or return, depending on your use case
+  fi
+  echo "slept total of $totalTime"
+  sleep 0.05
+done
+
 tmux send-keys -t $selected_name "ready-tmux" ^M
+sleep 0.25
+switch_to
 
