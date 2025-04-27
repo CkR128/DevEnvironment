@@ -1,4 +1,3 @@
-
 # Change window
 alt - j : yabai -m window --focus south
 alt - k : yabai -m window --focus north
@@ -15,6 +14,9 @@ ctrl + alt - k : yabai -m window --warp north
 ctrl + alt - h : yabai -m window --warp west
 ctrl + alt - l : yabai -m window --warp east
  
+shift + alt - p : yabai -m window --space prev
+shift + alt - n : yabai -m window --space next
+
 shift + alt - 1 : yabai -m window --space 1
 shift + alt - 2 : yabai -m window --space 2
 shift + alt - 3 : yabai -m window --space 3
@@ -32,14 +34,30 @@ ctrl + cmd - l : yabai -m window east --resize left:20:0 2> /dev/null || yabai -
 
 shift + alt - g : yabai -m window --opacity 0.1 && sleep $(yabai -m config window_opacity_duration) && yabai -m window --opacity 0.0
 
+# change between display
+alt - h : yabai -m display --focus west
+alt - l : yabai -m display --focus east
+
+
+# rotate layout
 shift + alt - r : yabai -m space --rotate 270
 
+# flip y-axis
 shift + alt - y : yabai -m space --mirror y-axis
 
+# flip x-axis
 shift + alt - x : yabai -m space --mirror x-axis
 
+# toggle window float
 shift + alt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
 
+# maximize window
 shift + alt - m : yabai -m window --toggle zoom-fullscreen
 
+# balance out tree of windows (resize to occupy same area)
 shift + alt - e : yabai -m space --balance
+
+ctrl + alt - q : yabai --stop-service
+ctrl + alt - s : yabai --start-service
+ctrl + alt - r : yabai --restart-service
+
