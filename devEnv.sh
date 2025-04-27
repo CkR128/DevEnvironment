@@ -64,6 +64,8 @@ copy_dir_local .config/ nvim/ $HOME/.config
 copy_dir_local .config/ yabai/ $HOME/.config
 copy_dir_local .config/ skhd/ $HOME/.config
 copy_dir .local/ $HOME/.local
+execute chmod -R u+x $HOME/.local/scripts
+
 copy_file .config/kanatarc  $HOME/.config
 copy_file  ./.zprofile  $HOME
 copy_file  ./.tmux.conf  $HOME
