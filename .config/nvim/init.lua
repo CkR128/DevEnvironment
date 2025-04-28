@@ -135,8 +135,7 @@ require("lazy").setup({
     { import = "plugins" },
   },
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-
+  "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically 
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
