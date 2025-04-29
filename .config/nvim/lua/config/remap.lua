@@ -19,6 +19,8 @@ vim.keymap.set({"n", "v"}, "<leader>d", "\"_d", { desc = "[D]elete to null-reg" 
 vim.keymap.set("n", "<leader>Y", "\"+Y", { desc = "[Y]ank Line to Clipboard" })
 
 vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+
 
 vim.keymap.set("n", "<leader><C-R>", "sp <CR> :term python % <CR>")
 
