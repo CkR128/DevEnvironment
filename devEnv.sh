@@ -70,4 +70,6 @@ copy_file .config/kanatarc  $HOME/.config
 copy_file  ./.zprofile  $HOME
 copy_file  ./.tmux.conf  $HOME
 copy_file  ./.ready-tmux $HOME
+copy_file  ./.tmuxDaemonLoader $HOME
 execute chmod u+x $HOME/.ready-tmux
+execute chmod u+x $HOME/.tmuxDaemonLoader

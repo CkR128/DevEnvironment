@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if tmux has-session -t=Daemon 2> /dev/null; then
+    echo "Daemons already running in tmux. Exiting script."
+	exit 0
+fi
+
+tmux new-session -ds Daemon -n karabiner
+tmux neww -t Daemon: -n kanata
+tmux neww -t Daemon: -n skhd
+tmux neww -t Daemon: -n yabai
+tmux neww -t Daemon: -n verdaccio
+
+tmux send-keys -t Daemon:1 "sudo '/Library/Application Support/org.pqrs/Karabiner-DriverKit-VirtualHIDDevice/Applications/Karabiner-VirtualHIDDevice-Daemon.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Daemon'" ^M
+tmux send-keys -t Daemon:2 "sudo kanata -c .config/kanatarc" ^M
+tmux send-keys -t Daemon:3 "yabai --start-service" ^M
+tmux send-keys -t Daemon:3 "yabai --restart-service" ^M
+tmux send-keys -t Daemon:4 "skhd" ^M
+tmux send-keys -t Daemon:5 "verdaccio" ^M
