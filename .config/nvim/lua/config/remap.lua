@@ -19,8 +19,18 @@ vim.keymap.set({"n", "v"}, "<leader>d", "\"_d", { desc = "[D]elete to null-reg" 
 vim.keymap.set("n", "<leader>Y", "\"+Y", { desc = "[Y]ank Line to Clipboard" })
 
 vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
+local function is_in_tmux()
+  return vim.env.TMUX ~= nil
+end
+vim.keymap.set("n", "<C-f>", function()
+    if is_in_tmux() then
+        vim.fn.system("tmux neww tmux-sessionizer")
+    else
+        print("Not running tmux, can not run sessionizer.")
+        vim.notify("Not running tmux, can not run sessionizer.")
+    end
+end, { desc = "Swap project - Tmux Sessionizer"})
 
 vim.keymap.set("n", "<leader><C-R>", "sp <CR> :term python % <CR>")
 
