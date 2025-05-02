@@ -12,30 +12,33 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
-vim.keymap.set("x", "<leader>p", "\"_dP", { desc = "Delete null-reg, Paste" })
+vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Delete null-reg, Paste" })
 
-vim.keymap.set({"n", "v"}, "<leader>y", "\"+y", { desc = "[Y]ank to Clipboard" })
-vim.keymap.set({"n", "v"}, "<leader>d", "\"_d", { desc = "[D]elete to null-reg" })
-vim.keymap.set("n", "<leader>Y", "\"+Y", { desc = "[Y]ank Line to Clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "[Y]ank to Clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "[D]elete to null-reg" })
+vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "[Y]ank Line to Clipboard" })
 
 vim.keymap.set("n", "Q", "<nop>")
 
 local function is_in_tmux()
-  return vim.env.TMUX ~= nil
+	return vim.env.TMUX ~= nil
 end
 vim.keymap.set("n", "<C-f>", function()
-    if is_in_tmux() then
-        vim.fn.system("tmux neww tmux-sessionizer")
-    else
-        print("Not running tmux, can not run sessionizer.")
-        vim.notify("Not running tmux, can not run sessionizer.")
-    end
-end, { desc = "Swap project - Tmux Sessionizer"})
+	if is_in_tmux() then
+		vim.fn.system("tmux neww tmux-sessionizer")
+	else
+		print("Not running tmux, can not run sessionizer.")
+		vim.notify("Not running tmux, can not run sessionizer.")
+	end
+end, { desc = "Swap project - Tmux Sessionizer" })
 
 vim.keymap.set("n", "<leader><C-R>", "sp <CR> :term python % <CR>")
 
-vim.keymap.set({"n", "v"}, "G", 'gg', { noremap = true})
-vim.keymap.set({"n", "v"}, "gg", 'G', { noremap = true})
+vim.keymap.set({ "n", "v" }, "G", "gg", { noremap = true })
+vim.keymap.set({ "n", "v" }, "gg", "G", { noremap = true })
+
+vim.keymap.set("n", "<M-j>", "<cmd>cnext<CR>")
+vim.keymap.set("n", "<M-k>", "<cmd>cprev<CR>")
 
 local bufopts = { noremap = true, silent = true, buffer = bufnr }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts, { desc = "Open [E]rror." })
@@ -86,9 +89,9 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Highlight when yanking (copying) text",
-  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 })
