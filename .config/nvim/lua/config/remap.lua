@@ -37,8 +37,8 @@ vim.keymap.set("n", "<leader><C-R>", "sp <CR> :term python % <CR>")
 vim.keymap.set({ "n", "v" }, "G", "gg", { noremap = true })
 vim.keymap.set({ "n", "v" }, "gg", "G", { noremap = true })
 
-vim.keymap.set("n", "<M-j>", "<cmd>cnext<CR>")
-vim.keymap.set("n", "<M-k>", "<cmd>cprev<CR>")
+vim.keymap.set("n", "<C-c>j", "<cmd>cnext<CR>")
+vim.keymap.set("n", "<C-c>k", "<cmd>cprev<CR>")
 
 local bufopts = { noremap = true, silent = true, buffer = bufnr }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts, { desc = "Open [E]rror." })
