@@ -105,3 +105,18 @@ vim.api.nvim_create_autocmd("FileType", {
 	group = augroup,
 	command = "compiler tsc | setlocal makeprg=npx\\ tsc",
 })
+
+vim.api.nvim_create_augroup("CloseGitOnCommit", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePost", {
+	group = "CloseGitOnCommit",
+	pattern = "*",
+	callback = function()
+		local buf_ids = vim.api.nvim_list_bufs()
+		for _, buf_id in ipairs(buf_ids) do
+			local name = vim.api.nvim_buf_get_name(buf_id)
+			if string.match(name, "fugitive.*%.git") then
+				vim.api.nvim_buf_delete(buf_id, { force = false })
+			end
+		end
+	end,
+})
