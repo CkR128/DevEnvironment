@@ -17,6 +17,8 @@ vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Delete null-reg, Paste" })
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "[Y]ank to Clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "[D]elete to null-reg" })
 vim.keymap.set("n", "<leader>Y", '"+Y', { desc = "[Y]ank Line to Clipboard" })
+vim.keymap.set("n", "<leader>o", "o<ESC>", { desc = "[o] Newline below - in Normal Mode" })
+vim.keymap.set("n", "<leader>O", "O<ESC>", { desc = "[O] Newline above - in Normal Mode" })
 
 vim.keymap.set("n", "Q", "<nop>")
 
