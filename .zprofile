@@ -3,9 +3,6 @@ alias ll="ls -al"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
 ##
 # Your previous /Users/cameron/.zprofile file was backed up as /Users/cameron/.zprofile.macports-saved_2022-11-15_at_18:59:40
 ##
