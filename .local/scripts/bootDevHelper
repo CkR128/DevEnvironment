@@ -1,0 +1,153 @@
+#!/bin/bash
+#
+# ------------------------------------------------------------------
+# bootDevHelper
+#
+# Description : Helps simplify the running and submission process for bootDev
+#               courses that use the CMD line too. Saves the last used key and
+#               allows for quick re-run of the tests or simple submission.
+# Usage       : ./bootDevHelper
+#
+# Author      : Cameron Robinson 
+# Created     : 2025-06-30
+# Version     : 1.0
+#
+# License     : GNU Affero General Public License v3.0 (AGPLv3)
+# ------------------------------------------------------------------
+
+tempDir="$HOME/.cache/bdRun"
+bdCache="$tempDir/bdCache"
+
+mkdir -p "$tempDir"
+if [[ ! -f "$bdCache" ]]; then
+    touch "$bdCache"
+fi
+
+function checkForKey() {
+    # Loop through all arguments
+    count=0
+    key=""
+    for arg in "$@"; do
+        if [[ "$count" -eq 0 ]]; then
+            if [[ ! "$arg" =~ bootdev ]]; then
+                #echo "Did not get expected input 1."
+                echo ""
+                return 1
+            fi
+            count=$((count + 1))
+            continue
+        fi
+        if [[ "$count" -eq 1 ]]; then
+            if [[ ! "$arg" =~ run ]]; then
+                #echo "Did not get expected input 2."
+                echo ""
+                return 2
+            fi
+            count=$((count + 1))
+            continue
+        fi
+        if [[ "$count" -eq 2 ]]; then
+            if [[ ! "$arg" =~ [a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12} ]]; then
+                #echo "Did not get expected input 3."
+                echo ""
+                return 3
+            fi
+            key="$arg"
+            break 
+        fi
+    done
+    echo "$key"
+    return 0
+}
+
+function runKey() {
+    if [[ -z "$@" ]]; then
+        echo "Bad key"
+        exit 2
+    fi
+    #echo "running: $key"
+    #echo "$key" >> "$bdCache"
+    bootdev run "$key" 
+}
+
+function submitKey() {
+    if [[ -z "$@" ]]; then
+        echo "Bad key"
+        exit 2
+    fi
+    #echo "running: $key"
+    #echo "$key" >> "$bdCache"
+    bootdev run "$key" -s
+}
+
+state=0
+key=""
+echo ""
+echo "Welcome to the BootDev Submission Helper!"
+echo "Commands will be executed at: $(pwd)"
+echo ""
+while true; do
+    if [[ $state -eq 0 ]]; then
+        echo "Enter your bootdev run command."
+        echo "    EG: bootdev run 12345678-9101-1121-3141-516171819202"
+        echo ""
+        echo "Enter 'quit' or 'exit' to close."
+    else
+        echo ""
+        echo "--------------------------------------"
+        echo "BootDev Submission Helper"
+        echo "Menu:"
+        echo "--------------------------------------"
+        echo "<Empty Return> : Re-Run with same run ID"
+        echo "!              : Submit with current run ID"
+        echo "pwd            : Print the directory this tool is executing in."
+        echo ""
+        echo "Enter new bootdev run command to update and run."
+        echo "    EG: bootdev run 12345678-9101-1121-3141-516171819202"
+        echo ""
+        echo "Enter 'quit' or 'exit' to close."
+        echo "--------------------------------------"
+    fi
+    read -ra words -p "> "
+
+    if [[ state -eq 1 ]]; then  
+        if [[ ${#words[@]} -eq 0 ]]; then
+            echo "--------------------------------------"
+            runKey key
+            continue
+        fi
+
+        if [[ ${#words[@]} -eq 1 && "$words" == "!" ]]; then
+            echo "--------------------------------------"
+            submitKey key
+            continue
+        fi
+    fi
+
+    if [[ ${#words[@]} -eq 1 && "$words" == "pwd" ]]; then
+        echo "Current working directory:"
+        echo "$(pwd)"
+        continue
+    fi
+
+    if [[ ${#words[@]} -eq 1 && ("$words" == "quit" || "$words" == "exit") ]]; then
+        echo "Goodbye!"
+        break
+    fi
+
+    key=($(checkForKey "${words[@]}"))
+    if [[ ! $? -eq 0 ]]; then
+        echo ""
+        echo "Did not supply a proper run command. Please try again."
+        echo ""
+        continue
+    fi
+
+    if [[ $state -eq 0 ]]; then
+        state=$((state + 1))
+    fi
+    echo "--------------------------------------"
+    echo "--------------------------------------"
+    runKey key
+done
+
