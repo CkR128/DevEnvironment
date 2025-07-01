@@ -15,8 +15,9 @@
 # License     : GNU Affero General Public License v3.0 (AGPLv3)
 # ------------------------------------------------------------------
 
-tempDir="$HOME/.cache/bdRun"
-bdCache="$tempDir/bdCache"
+tempDir="$HOME/.cache/bootDevHelper"
+bdCache="$tempDir/bdHelperCache"
+bootDevConfig="$HOME/.bootdev.yaml"
 
 mkdir -p "$tempDir"
 if [[ ! -f "$bdCache" ]]; then
@@ -24,13 +25,15 @@ if [[ ! -f "$bdCache" ]]; then
 fi
 
 function checkForKey() {
-    # Loop through all arguments
     count=0
     key=""
     for arg in "$@"; do
+        if [[ "$count" -eq 0 && "$arg" =~ http.*boot\.dev.*\/([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}) ]]; then
+            key="${BASH_REMATCH[1]}"
+            break
+        fi
         if [[ "$count" -eq 0 ]]; then
             if [[ ! "$arg" =~ bootdev ]]; then
-                #echo "Did not get expected input 1."
                 echo ""
                 return 1
             fi
@@ -39,7 +42,6 @@ function checkForKey() {
         fi
         if [[ "$count" -eq 1 ]]; then
             if [[ ! "$arg" =~ run ]]; then
-                #echo "Did not get expected input 2."
                 echo ""
                 return 2
             fi
@@ -48,7 +50,6 @@ function checkForKey() {
         fi
         if [[ "$count" -eq 2 ]]; then
             if [[ ! "$arg" =~ [a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12} ]]; then
-                #echo "Did not get expected input 3."
                 echo ""
                 return 3
             fi
@@ -61,65 +62,129 @@ function checkForKey() {
 }
 
 function runKey() {
-    if [[ -z "$@" ]]; then
-        echo "Bad key"
+    key=$1
+    if [[ -z "$key" ]]; then
+        echo "Bad key, could not submit. Closing."
         exit 2
     fi
-    #echo "running: $key"
-    #echo "$key" >> "$bdCache"
     bootdev run "$key" 
 }
 
 function submitKey() {
-    if [[ -z "$@" ]]; then
-        echo "Bad key"
+    key=$1
+    if [[ -z "$key" ]]; then
+        echo "Bad key, could not submit. Closing."
         exit 2
     fi
-    #echo "running: $key"
-    #echo "$key" >> "$bdCache"
     bootdev run "$key" -s
+}
+function fetchMetaData() {
+    key="$1"
+    token="$2"
+    if [[ -z "$key" ]]; then
+        echo "Bad key"
+        return 1
+    fi
+    if [[ -z "$token" ]]; then
+        echo "Bad token"
+        return 2
+    fi
+    response=$(curl -s -X GET "https://api.boot.dev/v1/lessons/$key" -H "Authorization: Bearer $token" -H "Content-Type: application/json")
+
+    courseTitle=$(echo "$response" | jq -r '.Lesson.CourseTitle')
+
+    chapterTitle=$(echo "$response" | jq -r '.Lesson.ChapterTitle')
+    chapterNumber=$(echo "$response" | jq -r '.Lesson.ChapterSlug')
+    if [[ ! "$chapterNumber" =~ ([0-9]+)-.* ]]; then
+        chapterNumber=""
+    else
+        chapterNumber="${BASH_REMATCH[1]}"
+    fi
+
+    lessionTitle=$(echo "$response" | jq -r '.Lesson.Title')
+    lessionNumber=$(echo "$response" | jq -r '.Lesson.Slug')
+    if [[ ! "$lessionNumber" =~ ([0-9]+)-.* ]]; then
+        lessionNumber=""
+    else
+        lessionNumber="${BASH_REMATCH[1]}"
+    fi
+    return 0
+}
+function readToken() {
+    while IFS= read -r line; do
+        if [[ ! "$line" =~ access_token:\ (.*) ]]; then
+            continue
+        fi
+        echo "${BASH_REMATCH[1]}"
+        break
+    done < "$bootDevConfig"
 }
 
 state=0
 key=""
+courseTitle=""
+chapterTitle=""
+chapterNumber=""
+lessionTitle=""
+lessionNumber=""
 echo ""
 echo "Welcome to the BootDev Submission Helper!"
 echo "Commands will be executed at: $(pwd)"
 echo ""
 while true; do
-    if [[ $state -eq 0 ]]; then
-        echo "Enter your bootdev run command."
-        echo "    EG: bootdev run 12345678-9101-1121-3141-516171819202"
+    if [[ (! $state -eq 0) && (! -z "$lessionTitle") ]]; then
+        lessionChapter="Chapter $chapterNumber-$lessionNumber: $lessionTitle"
+        lessonMissing=$(( ${#courseTitle} - ${#lessionChapter} ))
+        lessonSpaces=""
+        if [[ $lessionMissing -gt 0 ]]; then
+            lessonSpaces=$(printf '%*s' "$lessionMissing" '')
+        fi
+        courseMissing=$(( ${#lessionChapter} - ${#courseTitle} ))
+        courseSpaces=""
+        if [[ $courseMissing -gt 0 ]]; then
+            courseSpaces=$(printf '%*s' "$courseMissing" '')
+        fi
+
         echo ""
-        echo "Enter 'quit' or 'exit' to close."
-    else
         echo ""
         echo "--------------------------------------"
-        echo "BootDev Submission Helper"
-        echo "Menu:"
-        echo "--------------------------------------"
-        echo "<Empty Return> : Re-Run with same run ID"
-        echo "!              : Submit with current run ID"
-        echo "pwd            : Print the directory this tool is executing in."
-        echo ""
-        echo "Enter new bootdev run command to update and run."
-        echo "    EG: bootdev run 12345678-9101-1121-3141-516171819202"
-        echo ""
-        echo "Enter 'quit' or 'exit' to close."
-        echo "--------------------------------------"
+        echo "--- $courseTitle$courseSpaces ---"
+        if [[ (! -z "$chapterNumber") && (! -z "$lessionNumber") ]]; then
+            echo "--- $lessionChapter$lessonSpaces ---"
+        fi
     fi
+    echo "--------------------------------------"
+    echo "BootDev Submission Helper Menu:"
+    echo "--------------------------------------"
+    if [[ ! $state -eq 0 ]]; then
+        echo "<Empty Return> : Run current lession ID"
+        echo "!              : Submit current lession ID"
+    fi
+    echo "pwd            : Print the directory this tool is executing in."
+    echo ""
+    if [[ ! $state -eq 0 ]]; then
+        echo "Enter new bootdev run command or lession url to load new lession."
+    else
+        echo "Enter a bootdev run command or lession url to load lession."
+    fi
+    echo "    EG:"
+    echo "        - bootdev run 12345678-9101-1121-3141-516171819202"
+    echo "        - https://www.boot.dev/lessons/12345678-9101-1121-3141-516171819202"
+    echo ""
+    echo "Enter 'quit' or 'exit' to close."
+    echo "--------------------------------------"
     read -ra words -p "> "
 
     if [[ state -eq 1 ]]; then  
         if [[ ${#words[@]} -eq 0 ]]; then
             echo "--------------------------------------"
-            runKey key
+            runKey "$key"
             continue
         fi
 
         if [[ ${#words[@]} -eq 1 && "$words" == "!" ]]; then
             echo "--------------------------------------"
-            submitKey key
+            submitKey "$key"
             continue
         fi
     fi
@@ -146,8 +211,8 @@ while true; do
     if [[ $state -eq 0 ]]; then
         state=$((state + 1))
     fi
-    echo "--------------------------------------"
-    echo "--------------------------------------"
-    runKey key
+
+    token=($(readToken))
+    fetchMetaData "$key" "$token"
 done
 
