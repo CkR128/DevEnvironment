@@ -206,7 +206,6 @@ return {
 		local servers = {
 			-- clangd = {},
 			-- gopls = {},
-			-- pyright = {},
 			-- pylsp = {},
 			pyright = {},
 			-- rust_analyzer = {},
