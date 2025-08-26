@@ -42,3 +42,4 @@ for script in $scripts; do
     log "Running script: $script"
     execute ./$script
 done
+source ~/.zprofile
