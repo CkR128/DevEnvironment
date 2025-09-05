@@ -42,4 +42,15 @@ for script in $scripts; do
     log "Running script: $script"
     execute ./$script
 done
+
 source ~/.zprofile
+
+echo ""
+echo ""
+
+echo "=========================================="
+echo "Run 'source ~/.zprofile' to re-source node."
+echo "=========================================="
+
+echo ""
+echo ""
