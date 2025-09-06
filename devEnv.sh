@@ -63,6 +63,7 @@ cd $script_dir
 copy_dir_local .config/ nvim/ $HOME/.config
 copy_dir_local .config/ yabai/ $HOME/.config
 copy_dir_local .config/ skhd/ $HOME/.config
+copy_dir_local .config/ tmux/ $HOME/.config
 copy_dir .local/ $HOME/.local
 execute chmod -R u+x $HOME/.local/scripts
 
@@ -71,5 +72,9 @@ copy_file  ./.zprofile  $HOME
 copy_file  ./tmux/.tmux.conf  $HOME
 copy_file  ./.ready-tmux $HOME
 copy_file  ./.tmuxDaemonLoader $HOME
+copy_file  ./.tmux-cht-languages $HOME
+copy_file  ./.tmux-cht-command $HOME
+
 execute chmod u+x $HOME/.ready-tmux
 execute chmod u+x $HOME/.tmuxDaemonLoader
+
