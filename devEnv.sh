@@ -66,9 +66,9 @@ copy_dir_local .config/ skhd/ $HOME/.config
 copy_dir .local/ $HOME/.local
 execute chmod -R u+x $HOME/.local/scripts
 
-copy_file .config/kanatarc  $HOME/.config
+copy_file  .config/kanatarc  $HOME/.config
 copy_file  ./.zprofile  $HOME
-copy_file  ./.tmux.conf  $HOME
+copy_file  ./tmux/.tmux.conf  $HOME
 copy_file  ./.ready-tmux $HOME
 copy_file  ./.tmuxDaemonLoader $HOME
 execute chmod u+x $HOME/.ready-tmux
