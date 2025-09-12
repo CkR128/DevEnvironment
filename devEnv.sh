@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 
 script_dir=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
-dry="0"
+filter=""
+dry="1"
 
 while [[ $# > 0 ]]; do
-    if [[ "$1" == "--dry" ]]; then
-        dry="1"
+    if [[ "$1" == "--notdry" ]]; then
+        dry="0"
+    else
+        filter="$1"
     fi
     shift
 done
+
+if [[ $dry == "1" ]]; then
+    echo ""
+    echo "-------------------------------"
+    echo " DRY RUN"
+    echo "-------------------------------"
+    echo ""
+fi
+
 
 log() {
     if [[ $dry == "1" ]]; then
@@ -60,21 +72,58 @@ copy_file() {
 }
 
 cd $script_dir
-copy_dir_local .config/ nvim/ $HOME/.config
-copy_dir_local .config/ yabai/ $HOME/.config
-copy_dir_local .config/ skhd/ $HOME/.config
-copy_dir_local .config/ tmux/ $HOME/.config
-copy_dir .local/ $HOME/.local
-execute chmod -R u+x $HOME/.local/scripts
+directories=("nvim" "yabai" "skhd" "tmux")
+for index in "${!directories[@]}"; do
+    dir="${directories[$index]}"
+    if echo "$dir" | grep -qv "$filter"; then
+        log "Filtering: $filter -- $dir"
+        continue
+    fi
+    log "Copying: $dir"
+    copy_dir_local .config/ "$dir"/ $HOME/.config
+done
 
-copy_file  .config/kanatarc  $HOME/.config
-copy_file  ./.zprofile  $HOME
-copy_file  ./tmux/.tmux.conf  $HOME
-copy_file  ./.ready-tmux $HOME
-copy_file  ./.tmuxDaemonLoader $HOME
-copy_file  ./.tmux-cht-languages $HOME
-copy_file  ./.tmux-cht-command $HOME
+if echo "local" | grep -qv "$filter"; then
+    log "Filtering: $filter -- local"
+else
+    log "Copying: local"
+    copy_dir .local/ $HOME/.local
+    execute chmod -R u+x $HOME/.local/scripts
+fi
 
-execute chmod u+x $HOME/.ready-tmux
-execute chmod u+x $HOME/.tmuxDaemonLoader
+files=(
+".config/kanatarc,$HOME/.config"
+".config/zprofile,$HOME"
+)
+for index in "${!files[@]}"; do
+    file="${files[$index]}"
+    IFS=',' read -r -a elements <<< "${file}"
+    len=${#elements[@]}
+    if [ "$len" -lt 2 ]; then
+        echo "Array didn't have the correct length, skipping"
+        continue
+    fi
+
+    origin=${elements[0]}
+    dest=${elements[1]}
+    if echo "$origin" | grep -qv "$filter"; then
+        log "Filtering: $filter -- $origin"
+        continue
+    fi
+    log "Copying: $origin"
+    copy_file "$origin" "$dest"
+done
+
+if echo "tmux" | grep -qv "$filter"; then
+    log "Filtering: $filter -- tmux"
+else
+    echo "Copying Tmux"
+    copy_file  ./tmux/.tmux.conf  $HOME
+    copy_file  ./.ready-tmux $HOME
+    execute chmod u+x $HOME/.ready-tmux
+    copy_file  ./.tmuxDaemonLoader $HOME
+    execute chmod u+x $HOME/.tmuxDaemonLoader
+    copy_file  ./.tmux-cht-languages $HOME
+    copy_file  ./.tmux-cht-command $HOME
+fi
 
