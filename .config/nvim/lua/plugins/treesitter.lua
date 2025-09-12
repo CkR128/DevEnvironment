@@ -55,6 +55,15 @@ return { -- Highlight, edit, and navigate code
 			highlight = { enable = true },
 			indent = { enable = true },
 		})
+		-- Go to the next diagnostic, even if on the same line
+		vim.keymap.set("n", "]e", function()
+			vim.diagnostic.goto_next({ float = true })
+		end, { desc = "Go to next diagnostic" })
+
+		-- Go to the previous diagnostic, even if on the same line
+		vim.keymap.set("n", "[e", function()
+			vim.diagnostic.goto_prev({ float = true })
+		end, { desc = "Go to previous diagnostic" })
 	end,
 	-- There are additional nvim-treesitter modules that you can use to interact
 	-- with nvim-treesitter. You should go explore a few and see what interests you:
