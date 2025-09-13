@@ -43,7 +43,7 @@ vim.keymap.set("n", "<C-c>j", "<cmd>cnext<CR>")
 vim.keymap.set("n", "<C-c>k", "<cmd>cprev<CR>")
 
 local bufopts = { noremap = true, silent = true, buffer = bufnr }
-vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts, { desc = "Open [E]rror." })
+vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts, { desc = "open [e]rror." })
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -73,10 +73,10 @@ vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+vim.keymap.set("n", "<C-M-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
+vim.keymap.set("n", "<C-M-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
+vim.keymap.set("n", "<C-M-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+vim.keymap.set("n", "<C-M-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
