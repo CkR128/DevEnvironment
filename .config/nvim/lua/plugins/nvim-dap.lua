@@ -1,20 +1,20 @@
 -- stylua: ignore
-local function linkKeybindings()
-	vim.keymap.set("n", "<leader>da", function() require('dap').continue() end, { desc = "DAP - Continue" })
-	vim.keymap.set("n", "<leader>db", function() require('dap').toggle_breakpoint() end, { desc = "DAP - Toggle Breakpoint" })
-	vim.keymap.set("n", "<leader>dB", function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, { desc = "DAP - Conditional Breakpoint" })
-	vim.keymap.set("n", "<leader>dd", function() require('dap').continue() end, { desc = "DAP - Continue" })
-	vim.keymap.set("n", "<leader>dh", function() require('dapui').eval() end, { desc = "DAP - Evaluate" })
-	vim.keymap.set("n", "<leader>di", function() require('dap').step_into() end, { desc = "DAP - Step Into" })
-	vim.keymap.set("n", "<leader>do", function() require('dap').step_out() end, { desc = "DAP - Step Out" })
-	vim.keymap.set("n", "<leader>dO", function() require('dap').step_over() end, { desc = "DAP - Step Over" })
-	vim.keymap.set("n", "<leader>dt", function() require('dap').terminate() end, { desc = "DAP - Terminate" })
-	vim.keymap.set("n", "<leader>du", function() require('dapui').open() end, { desc = "DAP - Open UI" })
-	vim.keymap.set("n", "<leader>dc", function() require('dapui').close() end, { desc = "DAP - Close UI" })
-	vim.keymap.set("n", "<leader>dw", function() require('dapui').float_element('watches', { enter = true }) end,          { desc = "DAP - Watches" })
-	vim.keymap.set("n", "<leader>ds", function() require('dapui').float_element('scopes', { enter = true }) end,           { desc = "DAP - Scopes" })
-	vim.keymap.set("n", "<leader>dr", function() require('dapui').float_element('repl', { enter = true }) end,             { desc = "DAP - REPL" })
-end
+-- local function linkKeybindings()
+-- 	vim.keymap.set("n", "<leader>da", function() require('dap').continue() end, { desc = "DAP - Continue" })
+-- 	vim.keymap.set("n", "<leader>db", function() require('dap').toggle_breakpoint() end, { desc = "DAP - Toggle Breakpoint" })
+-- 	vim.keymap.set("n", "<leader>dB", function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, { desc = "DAP - Conditional Breakpoint" })
+-- 	vim.keymap.set("n", "<leader>dd", function() require('dap').continue() end, { desc = "DAP - Continue" })
+-- 	vim.keymap.set("n", "<leader>dh", function() require('dapui').eval() end, { desc = "DAP - Evaluate" })
+-- 	vim.keymap.set("n", "<leader>di", function() require('dap').step_into() end, { desc = "DAP - Step Into" })
+-- 	vim.keymap.set("n", "<leader>do", function() require('dap').step_out() end, { desc = "DAP - Step Out" })
+-- 	vim.keymap.set("n", "<leader>dO", function() require('dap').step_over() end, { desc = "DAP - Step Over" })
+-- 	vim.keymap.set("n", "<leader>dt", function() require('dap').terminate() end, { desc = "DAP - Terminate" })
+-- 	vim.keymap.set("n", "<leader>du", function() require('dapui').open() end, { desc = "DAP - Open UI" })
+-- 	vim.keymap.set("n", "<leader>dc", function() require('dapui').close() end, { desc = "DAP - Close UI" })
+-- 	vim.keymap.set("n", "<leader>dw", function() require('dapui').float_element('watches', { enter = true }) end,          { desc = "DAP - Watches" })
+-- 	vim.keymap.set("n", "<leader>ds", function() require('dapui').float_element('scopes', { enter = true }) end,           { desc = "DAP - Scopes" })
+-- 	vim.keymap.set("n", "<leader>dr", function() require('dapui').float_element('repl', { enter = true }) end,             { desc = "DAP - REPL" })
+-- end
 local function resolve_lhs(lhs)
 	return lhs:gsub("<leader>", vim.g.mapleader or "\\")
 end
@@ -33,7 +33,7 @@ end
 -- stylua: ignore
 local function removeKeybindings()
 	-- remove_keybinding("n", "<leader>da")
-	vim.keymap.del("n", " db", { desc = "DAP - Toggle Breakpoint" })
+	-- vim.keymap.del("n", " db", { desc = "DAP - Toggle Breakpoint" })
 	-- vim.keymap.del("n", "<Leader>dB", { desc = "DAP - Conditional Breakpoint" })
 	-- vim.keymap.del("n", "<Leader>dd", { desc = "DAP - Continue" })
 	-- vim.keymap.del("n", "<Leader>dh", { desc = "DAP - Evaluate" })
@@ -65,8 +65,8 @@ return {
 			local dapui = require("dapui")
 			local dap_virtual_text = require("nvim-dap-virtual-text")
 
-			vim.keymap.set("n", "<Leader>c",  function() require('dap').continue() end, { desc = "DAP - Continue" })
-			vim.keymap.set("n", "<Leader>db", function() require('dap').toggle_breakpoint() end, { desc = "DAP - Toggle Breakpoint" })
+			-- vim.keymap.set("n", "<Leader>c",  function() require('dap').continue() end, { desc = "DAP - Continue" })
+			-- vim.keymap.set("n", "<Leader>db", function() require('dap').toggle_breakpoint() end, { desc = "DAP - Toggle Breakpoint" })
 			-- ╭──────────────────────────────────────────────────────────╮
 			-- │ DAP Virtual Text Setup                                   │
 			-- ╰──────────────────────────────────────────────────────────╯
