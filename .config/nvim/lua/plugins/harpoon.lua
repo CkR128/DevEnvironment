@@ -63,19 +63,19 @@ return {
 
 			vim.keymap.set("n", "<leader><C-j>", function()
 				harpoon:list():replace_at(1)
-			end, { desc = "Harpoon - File 1" })
+			end, { desc = "Harpoon - Replace File 1" })
 
 			vim.keymap.set("n", "<leader><C-k>", function()
 				harpoon:list():replace_at(2)
-			end, { desc = "Harpoon - File 2" })
+			end, { desc = "Harpoon - Replace File 2" })
 
 			vim.keymap.set("n", "<leader><C-l>", function()
 				harpoon:list():replace_at(3)
-			end, { desc = "Harpoon - File 3" })
+			end, { desc = "Harpoon - Replace File 3" })
 
 			vim.keymap.set("n", "<leader><C-;>", function()
 				harpoon:list():replace_at(4)
-			end, { desc = "Harpoon - File 4" })
+			end, { desc = "Harpoon - Replace File 4" })
 		end,
 	},
 }

@@ -5,6 +5,7 @@ return { -- Useful plugin to show you pending keybinds.
 		-- delay between pressing a key and opening which-key (milliseconds)
 		-- this setting is independent of vim.opt.timeoutlen
 		delay = 0,
+		sort = { "local", "order", "group", "manual" },
 		icons = {
 			-- set icon mappings to true if you have a Nerd Font
 			mappings = vim.g.have_nerd_font,
@@ -44,7 +45,15 @@ return { -- Useful plugin to show you pending keybinds.
 		-- Document existing key chains
 		spec = {
 			{ "<leader>t", group = "[T]elescope", mode = { "n" } },
-			{ "<leader>e", desc = "Open Error" },
+			{ "<leader>u", desc = "[U]ndo Tree" },
+			{ "<leader>e", desc = "Open [E]rror" },
+			{ "<leader>/", desc = "[/] Search Current Buffer" },
+			{ "<leader>a", desc = "Harpoon - Push File" },
+			{ "<leader>s", desc = "Harpoon - Enqueue File" },
+			{ "<leader><C-j>", desc = "Harpoon - Replace File 1" },
+			{ "<leader><C-k>", desc = "Harpoon - Replace File 2" },
+			{ "<leader><C-l>", desc = "Harpoon - Replace File 3" },
+			{ "<leader><C-;>", desc = "Harpoon - Replace File 4" },
 		},
 	},
 }
