@@ -2,8 +2,16 @@ return {
 	{
 		"ThePrimeagen/harpoon",
 		branch = "harpoon2",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"folke/which-key.nvim",
+		},
 		config = function()
+			local wk = require("which-key")
+			wk.add({
+				{ "<leader>h", group = "Harpoon", desc = "Harpoon" },
+			})
+
 			local harpoon = require("harpoon")
 			harpoon:setup()
 
@@ -52,7 +60,7 @@ return {
 
 			vim.keymap.set("n", "<leader><C-;>", function()
 				harpoon:list():select(4)
-			end, { desc = "harpoon file 4" })
+			end, { desc = "Harpoon file 4" })
 
 			vim.keymap.set("n", "<C-S-P>", function()
 				harpoon:list():prev()

@@ -44,7 +44,6 @@ return { -- Useful plugin to show you pending keybinds.
 		-- Document existing key chains
 		spec = {
 			{ "<leader>t", group = "[T]elescope", mode = { "n" } },
-			{ "<leader>h", group = "harpoon", mode = { "n" } },
 		},
 	},
 }
