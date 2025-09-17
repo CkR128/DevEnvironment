@@ -5,7 +5,7 @@ filter=""
 dry="1"
 
 while [[ $# > 0 ]]; do
-    if [[ "$1" == "--notdry" ]]; then
+    if [[ "$1" == "--execute" ]]; then
         dry="0"
     else
         filter="$1"
@@ -15,9 +15,11 @@ done
 
 if [[ $dry == "1" ]]; then
     echo ""
-    echo "-------------------------------"
+    echo "---------------------------------"
     echo " DRY RUN"
-    echo "-------------------------------"
+    echo ""
+    echo " Use --execute to confirm script"
+    echo "---------------------------------"
     echo ""
 fi
 
