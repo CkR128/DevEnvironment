@@ -1,52 +1,3 @@
--- stylua: ignore
--- local function linkKeybindings()
--- 	vim.keymap.set("n", "<leader>da", function() require('dap').continue() end, { desc = "DAP - Continue" })
--- 	vim.keymap.set("n", "<leader>db", function() require('dap').toggle_breakpoint() end, { desc = "DAP - Toggle Breakpoint" })
--- 	vim.keymap.set("n", "<leader>dB", function() require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, { desc = "DAP - Conditional Breakpoint" })
--- 	vim.keymap.set("n", "<leader>dd", function() require('dap').continue() end, { desc = "DAP - Continue" })
--- 	vim.keymap.set("n", "<leader>dh", function() require('dapui').eval() end, { desc = "DAP - Evaluate" })
--- 	vim.keymap.set("n", "<leader>di", function() require('dap').step_into() end, { desc = "DAP - Step Into" })
--- 	vim.keymap.set("n", "<leader>do", function() require('dap').step_out() end, { desc = "DAP - Step Out" })
--- 	vim.keymap.set("n", "<leader>dO", function() require('dap').step_over() end, { desc = "DAP - Step Over" })
--- 	vim.keymap.set("n", "<leader>dt", function() require('dap').terminate() end, { desc = "DAP - Terminate" })
--- 	vim.keymap.set("n", "<leader>du", function() require('dapui').open() end, { desc = "DAP - Open UI" })
--- 	vim.keymap.set("n", "<leader>dc", function() require('dapui').close() end, { desc = "DAP - Close UI" })
--- 	vim.keymap.set("n", "<leader>dw", function() require('dapui').float_element('watches', { enter = true }) end,          { desc = "DAP - Watches" })
--- 	vim.keymap.set("n", "<leader>ds", function() require('dapui').float_element('scopes', { enter = true }) end,           { desc = "DAP - Scopes" })
--- 	vim.keymap.set("n", "<leader>dr", function() require('dapui').float_element('repl', { enter = true }) end,             { desc = "DAP - REPL" })
--- end
-local function resolve_lhs(lhs)
-	return lhs:gsub("<leader>", vim.g.mapleader or "\\")
-end
-local function remove_keybinding(mode, lhs)
-	local keymaps = vim.api.nvim_get_keymap(mode)
-	for _, map in ipairs(keymaps) do
-		if map.lhs == resolve_lhs(lhs) then
-			vim.keymap.del(mode, resolve_lhs(lhs))
-			vim.notify("Removed keymap: " .. lhs)
-			return
-		end
-	end
-	-- Optionally notify or ignore
-	vim.notify("Keymap not found: " .. lhs, vim.log.levels.DEBUG)
-end
--- stylua: ignore
-local function removeKeybindings()
-	-- remove_keybinding("n", "<leader>da")
-	-- vim.keymap.del("n", " db", { desc = "DAP - Toggle Breakpoint" })
-	-- vim.keymap.del("n", "<Leader>dB", { desc = "DAP - Conditional Breakpoint" })
-	-- vim.keymap.del("n", "<Leader>dd", { desc = "DAP - Continue" })
-	-- vim.keymap.del("n", "<Leader>dh", { desc = "DAP - Evaluate" })
-	-- vim.keymap.del("n", "<Leader>di", { desc = "DAP - Step Into" })
-	-- vim.keymap.del("n", "<Leader>do", { desc = "DAP - Step Out" })
-	-- vim.keymap.del("n", "<Leader>dO", { desc = "DAP - Step Over" })
-	-- vim.keymap.del("n", "<Leader>dt", { desc = "DAP - Terminate" })
-	-- vim.keymap.del("n", "<Leader>du", { desc = "DAP - Open UI" })
-	-- vim.keymap.del("n", "<Leader>dc", { desc = "DAP - Close UI" })
-	-- vim.keymap.del("n", "<Leader>dw", { desc = "DAP - Watches" })
-	-- vim.keymap.del("n", "<Leader>ds", { desc = "DAP - Scopes" })
-	-- vim.keymap.del("n", "<Leader>dr", { desc = "DAP - REPL" })
-end
 return {
 	{
 		"mfussenegger/nvim-dap",
@@ -57,6 +8,7 @@ return {
 			"mxsdev/nvim-dap-vscode-js",
 			"jay-babu/mason-nvim-dap.nvim",
 			"williamboman/mason.nvim",
+			"wojciech-kulik/xcodebuild.nvim",
 		},
 
 		-- stylua: ignore
@@ -243,6 +195,20 @@ return {
 					},
 				}
 			end
+
+			local xcodebuild = require("xcodebuild.integrations.dap")
+			-- SAMPLE PATH, change it to your local codelldb path
+			local codelldbPath = os.getenv("HOME") .. ".local/vscode-lldb/codelldb-darwin-arm64/extension/adapter/codelldb"
+
+			xcodebuild.setup(codelldbPath)
+
+			vim.keymap.set("n", "<leader>dd", xcodebuild.build_and_debug, { desc = "Build & Debug" })
+			vim.keymap.set("n", "<leader>dr", xcodebuild.debug_without_build, { desc = "Debug Without Building" })
+			vim.keymap.set("n", "<leader>dt", xcodebuild.debug_tests, { desc = "Debug Tests" })
+			vim.keymap.set("n", "<leader>dT", xcodebuild.debug_class_tests, { desc = "Debug Class Tests" })
+			vim.keymap.set("n", "<leader>b", xcodebuild.toggle_breakpoint, { desc = "Toggle Breakpoint" })
+			vim.keymap.set("n", "<leader>B", xcodebuild.toggle_message_breakpoint, { desc = "Toggle Message Breakpoint" })
+			vim.keymap.set("n", "<leader>dx", xcodebuild.terminate_session, { desc = "Terminate Debugger" })
 		end,
 	},
 }

@@ -1,3 +1,4 @@
+local progress_handle
 return {
 	"wojciech-kulik/xcodebuild.nvim",
 	dependencies = {
@@ -17,6 +18,57 @@ return {
 	config = function()
 		require("xcodebuild").setup({
 			-- put some options here or leave it empty to use default settings
+			vim.api.nvim_create_autocmd("User", {
+				pattern = { "XcodebuildBuildFinished", "XcodebuildTestsFinished" },
+				callback = function(event)
+					if event.data.cancelled then
+						return
+					end
+
+					if event.data.success then
+						require("trouble").close()
+					elseif not event.data.failedCount or event.data.failedCount > 0 then
+						if next(vim.fn.getqflist()) then
+							require("trouble").open("quickfix")
+						else
+							require("trouble").close()
+						end
+
+						require("trouble").refresh()
+					end
+				end,
+			}),
+			show_build_progress_bar = false,
+			logs = {
+				notify = function(message, severity)
+					local fidget = require("fidget")
+					if progress_handle then
+						progress_handle.message = message
+						if not message:find("Loading") then
+							progress_handle:finish()
+							progress_handle = nil
+							if vim.trim(message) ~= "" then
+								fidget.notify(message, severity)
+							end
+						end
+					else
+						fidget.notify(message, severity)
+					end
+				end,
+				notify_progress = function(message)
+					local progress = require("fidget.progress")
+
+					if progress_handle then
+						progress_handle.title = ""
+						progress_handle.message = message
+					else
+						progress_handle = progress.handle.create({
+							message = message,
+							lsp_client = { name = "xcodebuild.nvim" },
+						})
+					end
+				end,
+			},
 		})
 	end,
 }
