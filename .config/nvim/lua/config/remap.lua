@@ -1,4 +1,4 @@
-vim.keymap.set("n", "<leader>pe", vim.cmd.Ex, { desc = "[P]icker [E]xplorer" })
+vim.keymap.set("n", "<leader>pe", ":Rex <CR>", { desc = "[P]icker [E]xplorer" })
 
 vim.keymap.set("n", "<leader>lr", ":LspRestart<CR>", { desc = "[L]sp [R]estart" })
 
