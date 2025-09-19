@@ -22,6 +22,27 @@ return { -- Fuzzy Finder (files, lsp, etc)
 		{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
 	},
 	config = function()
+		local setGrepSearch = function()
+			if vim.fn.executable("rg") == 1 then
+				return nil
+			else
+				return {
+					"grep",
+					"--extended-regexp",
+					"--color=never",
+					"--with-filename",
+					"--line-number",
+					"-b",
+					"--ignore-case",
+					"--recursive",
+					"--no-messages",
+					"--exclude-dir=*cache*",
+					"--exclude-dir=.git",
+					"--exclude=.*",
+					"--binary-files=without-match",
+				}
+			end
+		end
 		-- Telescope is a fuzzy finder that comes with a lot of different things that
 		-- it can fuzzy find! It's more than just a "file finder", it can search
 		-- many different aspects of Neovim, your workspace, LSP, and more!
@@ -47,12 +68,10 @@ return { -- Fuzzy Finder (files, lsp, etc)
 			-- You can put your default mappings / updates / etc. in here
 			--  All the info you're looking for is in `:help telescope.setup()`
 			--
-			-- defaults = {
-			--   mappings = {
-			--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-			--   },
-			-- },
 			-- pickers = {}
+			defaults = {
+				vimgrep_arguments = setGrepSearch(),
+			},
 			extensions = {
 				["ui-select"] = {
 					require("telescope.themes").get_dropdown(),
