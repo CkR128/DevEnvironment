@@ -95,7 +95,7 @@ fi
 
 files=(
 ".config/kanatarc,$HOME/.config"
-".config/zprofile,$HOME"
+".config/.zprofile,$HOME"
 )
 for index in "${!files[@]}"; do
     file="${files[$index]}"

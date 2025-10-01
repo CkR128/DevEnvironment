@@ -18,6 +18,8 @@ export MANPATH="/opt/local/share/man:$MANPATH"
 # Created by `pipx` on 2025-02-07 03:04:10
 export PATH="$PATH:/Users/cameron/.local/bin"
 
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+
 addToPath() {
 	if [[ "$PATH" != *"$1"* ]]; then
 		export PATH=$PATH:$1
