@@ -86,26 +86,13 @@ return { -- Fuzzy Finder (files, lsp, etc)
 		-- See `:help telescope.builtin`
 		local builtin = require("telescope.builtin")
 		local utils = require("telescope.utils")
-		vim.keymap.set("n", "<leader>tf", builtin.find_files, { desc = "[T]elescope [F]ile names" })
-		vim.keymap.set("n", "<leader>tw", builtin.grep_string, { desc = "[T]elescope current [W]ord" })
-		vim.keymap.set("n", "<leader>td", builtin.diagnostics, { desc = "[T]elescope [D]iagnostics" })
-		vim.keymap.set("n", "<leader>tr", builtin.resume, { desc = "[T]elescope [R]esume" })
+		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ile names" })
+		vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "By Current [W]ord" })
+		vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[D]iagnostics" })
+		vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "[R]esume Search" })
+
 		-- vim.keymap.set("n", "<leader>t.", builtin.oldfiles, { desc = '[T]elescope Recent Files ("." for repeat)' })
-		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers - Telescope" })
-		vim.keymap.set("n", "<leader>tnh", builtin.help_tags, { desc = "[T]elescope [N]vim [H]elp" })
-		vim.keymap.set("n", "<leader>tnk", builtin.keymaps, { desc = "[T]elescope [N]vim [K]eymaps" })
-		vim.keymap.set("n", "<leader>tnt", builtin.builtin, { desc = "[T]elescope [N]vim [T]elescope definitions" })
-		-- Shortcut for searching your Neovim configuration files
-		vim.keymap.set("n", "<leader>tnc", function()
-			builtin.find_files({ cwd = vim.fn.stdpath("config") })
-		end, { desc = "[T]elescope [N]vim [C]onfig files" })
-
-		vim.keymap.set("n", "<C-p>", builtin.git_files, {})
-
-		vim.keymap.set("n", "<leader>tgl", builtin.live_grep, { desc = "[T]elescope by [G]rep [L]ive" })
-		vim.keymap.set("n", "<leader>tgp", function()
-			builtin.grep_string({ search = vim.fn.input("Grep > ") })
-		end, { desc = "[T]elescope by [G]rep [P]rompt" })
+		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Search Open Buffers (By File Name)" })
 
 		-- Slightly advanced example of overriding default behavior and theme
 		vim.keymap.set("n", "<leader>/", function()
@@ -114,19 +101,44 @@ return { -- Fuzzy Finder (files, lsp, etc)
 				winblend = 10,
 				previewer = false,
 			}))
-		end, { desc = "[/] Fuzzily search in current buffer - Telescope" })
+		end, { desc = "Current buffer" })
 
 		-- It's also possible to pass additional configuration options.
 		--  See `:help telescope.builtin.live_grep()` for information about particular keys
-		vim.keymap.set("n", "<leader>t/", function()
+		vim.keymap.set("n", "<leader>f/", function()
 			builtin.live_grep({
 				grep_open_files = true,
 				prompt_title = "Live Grep in Open Files",
 			})
-		end, { desc = "[T]elescope [/] in Open Files" })
+		end, { desc = "In Open Files" })
 
-		vim.keymap.set("n", "<leader>ts", function()
+		vim.keymap.set("n", "<leader>fc", function()
 			builtin.live_grep({ search_dirs = { utils.buffer_dir() } })
-		end, { desc = "[T]elescope live grep [S]earch in Current Working Directory" })
+		end, { desc = "In [C]urrent File's Directory" })
+
+		local searchDirectory = utils.buffer_dir()
+		vim.keymap.set("n", "<leader>f<C-t>", function()
+			searchDirectory = utils.buffer_dir()
+		end, { desc = "Set Search Directory" })
+		vim.keymap.set("n", "<leader>ft", function()
+			builtin.live_grep({
+				search_dirs = { searchDirectory },
+				prompt_title = "Grep in Set Directory",
+			})
+		end, { desc = "Search Recorded Directory" })
+		vim.api.nvim_create_autocmd("VimEnter", {
+			group = vim.api.nvim_create_augroup("Telescope-Custom", { clear = true }),
+			callback = function()
+				searchDirectory = utils.buffer_dir()
+			end,
+		})
+
+		vim.keymap.set("n", "<leader>fnh", builtin.help_tags, { desc = "Nvim [H]elp" })
+		vim.keymap.set("n", "<leader>fnk", builtin.keymaps, { desc = "Nvim [K]eymaps" })
+		vim.keymap.set("n", "<leader>fnt", builtin.builtin, { desc = "Nvim [T]elescope definitions" })
+		-- Shortcut for searching your Neovim configuration files
+		vim.keymap.set("n", "<leader>fnc", function()
+			builtin.find_files({ cwd = vim.fn.stdpath("config") })
+		end, { desc = "Nvim [C]onfig files" })
 	end,
 }

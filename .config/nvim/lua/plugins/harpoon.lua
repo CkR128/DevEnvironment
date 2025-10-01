@@ -29,19 +29,19 @@ return {
 					:find()
 			end
 
-			vim.keymap.set("n", "<leader>a", function()
+			vim.keymap.set("n", "<leader>ha", function()
 				harpoon:list():prepend()
 			end, { desc = "[A] Push to harpoon" })
 
-			vim.keymap.set("n", "<leader>s", function()
+			vim.keymap.set("n", "<leader>hs", function()
 				harpoon:list():add()
 			end, { desc = "[S] Enqueue to harpoon" })
 
-			vim.keymap.set("n", "<C-h>", function()
+			vim.keymap.set("n", "<leader>ph", function()
 				harpoon.ui:toggle_quick_menu(harpoon:list())
-			end, { desc = "[H]arpoon Picker" })
+			end, { desc = "[H]arpoon" })
 
-			vim.keymap.set("n", "<leader>th", function()
+			vim.keymap.set("n", "<leader>fh", function()
 				toggle_telescope(harpoon:list())
 			end, { desc = "[H]arpoon" })
 
@@ -61,21 +61,21 @@ return {
 				harpoon:list():select(4)
 			end, { desc = "Harpoon - File 4" })
 
-			vim.keymap.set("n", "<leader><C-j>", function()
+			vim.keymap.set("n", "<leader>h<C-j>", function()
 				harpoon:list():replace_at(1)
-			end, { desc = "Harpoon - Replace File 1" })
+			end, { desc = "Replace File 1" })
 
-			vim.keymap.set("n", "<leader><C-k>", function()
+			vim.keymap.set("n", "<leader>h<C-k>", function()
 				harpoon:list():replace_at(2)
-			end, { desc = "Harpoon - Replace File 2" })
+			end, { desc = "Replace File 2" })
 
-			vim.keymap.set("n", "<leader><C-l>", function()
+			vim.keymap.set("n", "<leader>h<C-l>", function()
 				harpoon:list():replace_at(3)
-			end, { desc = "Harpoon - Replace File 3" })
+			end, { desc = "Replace File 3" })
 
-			vim.keymap.set("n", "<leader><C-;>", function()
+			vim.keymap.set("n", "<leader>h<C-;>", function()
 				harpoon:list():replace_at(4)
-			end, { desc = "Harpoon - Replace File 4" })
+			end, { desc = "Replace File 4" })
 		end,
 	},
 }
