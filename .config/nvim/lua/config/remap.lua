@@ -39,6 +39,18 @@ end, { desc = "Swap project - Tmux Sessionizer" })
 vim.keymap.set({ "n", "v" }, "G", "gg", { noremap = true })
 vim.keymap.set({ "n", "v" }, "gg", "G", { noremap = true })
 
+local function toggleQuickFix()
+	local qf_win_info = vim.fn.getqflist({ winid = 0 })
+	if qf_win_info.winid ~= 0 then
+		vim.cmd("cclose")
+	else
+		vim.cmd("copen")
+	end
+end
+vim.keymap.set({ "n" }, "]q", "<cmd>try | cnext | catch | cfirst | catch | endtry<CR>")
+vim.keymap.set({ "n" }, "[q", "<cmd>try | cprev | catch | clast  | catch | endtry<CR>")
+vim.keymap.set({ "n" }, "<leader>q", toggleQuickFix, { desc = "Toggle [Q]uickfix" })
+
 local bufopts = { noremap = true, silent = true, buffer = bufnr }
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, bufopts, { desc = "Expand [E]rror." })
 
