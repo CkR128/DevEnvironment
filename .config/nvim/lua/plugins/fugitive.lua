@@ -28,8 +28,10 @@ return {
 			end,
 		})
 
-		vim.keymap.set("n", "gC", "<cmd>diffget //2<CR>", { desc = "Diff-Get - Current" })
-		vim.keymap.set("n", "gI", "<cmd>diffget //3<CR>", { desc = "Diff-Get - Incoming" })
-		vim.keymap.set("n", "gP", "<cmd>diffput //1<CR>", { desc = "Diff-Put - To Working" })
+		vim.keymap.set("n", "<leader>gq", "<cmd>G difftool<CR>", { desc = "Diff to Quickfix" })
+		vim.keymap.set("n", "<leader>gd", "<cmd>Gvdiffsplit!<CR>", { desc = "Diff Split" })
+		vim.keymap.set("n", "<leader>ga", "<cmd>diffget //2<CR>", { desc = "[A] Diff Get - Current" })
+		vim.keymap.set("n", "<leader>g;", "<cmd>diffget //3<CR>", { desc = "[;] Diff Get - Incoming" })
+		vim.keymap.set("n", "<leader>gp", "<cmd>diffput //1<CR>", { desc = "Diff Put - To Working" })
 	end,
 }
