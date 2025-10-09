@@ -1,12 +1,32 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+ROOT_PATH="$HOME/Developer"
 
-selected=$(find ~/personal -mindepth 1 -maxdepth 2 -type d | fzf)
+if [[ ! -d $ROOT_PATH ]]; then
+    echo "Could not find '$ROOT_PATH'"
+    exit 0
+fi
+
+selected=$(find $ROOT_PATH -mindepth 1 -maxdepth 1 -type d |  sed 's|\(.*\)\/\(.*\)|\2|' | fzf)
 if [[ -z "$selected" ]]; then
     exit 0
 fi
 
-selected_name=$(basename $selected | tr ":,. " "____")
+array=()
+# Find from the top level directory and sed off the initial path leaving just selected/subdir1/subdir2(optional)
+find $ROOT_PATH/$selected -mindepth 1 -maxdepth 2 -type d | sed "s|\(.*\)\/\($selected\/.*\)|\2|" >/tmp/tmpfileba
+# Add selected dir as an option.
+echo "$selected/." >> /tmp/tmpfileba
+# FZF over the tmp file to get the selected
+selected_lower=$(cat /tmp/tmpfileba | fzf | sed "s|$selected\/\(.*\)|\1|")
+rm -f /tmp/tmpfileba
 
+if [[ -z "$selected_lower" ]]; then
+    exit 0
+fi
+
+selected="$ROOT_PATH/$selected/$selected_lower"
+
+selected_name=$(basename $selected | tr ":,. " "____")
 switch_to() {
 	if [[ -z "$TMUX" ]]; then
 		tmux attach-session -t $selected_name
