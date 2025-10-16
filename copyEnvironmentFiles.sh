@@ -96,7 +96,9 @@ fi
 files=(
 ".config/kanatarc,$HOME/.config"
 ".config/.zprofile,$HOME"
+".config/.zshrc,$HOME"
 )
+
 for index in "${!files[@]}"; do
     file="${files[$index]}"
     IFS=',' read -r -a elements <<< "${file}"
