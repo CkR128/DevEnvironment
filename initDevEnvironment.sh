@@ -53,7 +53,6 @@ for script in $scripts; do
     execute ./$script
 done
 
-source ~/.zprofile
 
 echo ""
 echo ""
