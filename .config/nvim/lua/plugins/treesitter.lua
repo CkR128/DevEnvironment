@@ -17,6 +17,7 @@ return { -- Highlight, edit, and navigate code
 			"query",
 			"vim",
 			"vimdoc",
+			"swift",
 		},
 		-- Autoinstall languages that are not installed
 		auto_install = true,
@@ -50,6 +51,7 @@ return { -- Highlight, edit, and navigate code
 				"vimdoc",
 				"svelte",
 				"python",
+				"swift",
 			},
 			sync_install = false,
 			highlight = { enable = true },

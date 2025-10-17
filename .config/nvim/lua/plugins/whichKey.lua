@@ -51,6 +51,7 @@ return { -- Useful plugin to show you pending keybinds.
 			{ "<leader>/", desc = "[/] Search Current Buffer" },
 			{ "<leader>h", desc = "[H]arpoon" },
 			{ "<leader>g", desc = "[G]it" },
+			{ "<leader>t", desc = "[T]rouble" },
 			{ "<leader>l", desc = "[L]sp" },
 			{ "<leader>r", desc = "[R] - Debugging" },
 			{ "<leader>x", desc = "[X] - Trouble" },

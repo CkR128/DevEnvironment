@@ -4,14 +4,14 @@ return {
 	cmd = "Trouble",
 	keys = {
 		{
-			"<leader>xx",
+			"<leader>tD",
 			"<cmd>Trouble diagnostics toggle<cr>",
-			desc = "Diagnostics (Trouble)",
+			desc = "[T]rouble Global Diagnostics",
 		},
 		{
-			"<leader>xX",
+			"<leader>td",
 			"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-			desc = "Buffer Diagnostics (Trouble)",
+			desc = "[T]rouble Buffer Diagnostics",
 		},
 		-- {
 		-- 	"<leader>cs",
@@ -24,14 +24,14 @@ return {
 		-- 	desc = "LSP Definitions / references / ... (Trouble)",
 		-- },
 		{
-			"<leader>xL",
+			"<leader>tl",
 			"<cmd>Trouble loclist toggle<cr>",
-			desc = "Location List (Trouble)",
+			desc = "[T]rouble Location List",
 		},
 		{
-			"<leader>xQ",
+			"<leader>tQ",
 			"<cmd>Trouble qflist toggle<cr>",
-			desc = "Quickfix List (Trouble)",
+			desc = "[T]rouble Quickfix List",
 		},
 	},
 	config = function()
@@ -43,6 +43,27 @@ return {
 			mode = "quickfix",
 			severity = vim.diagnostic.severity.ERROR,
 			cycle_results = false,
+		})
+
+		vim.api.nvim_create_autocmd("User", {
+			pattern = { "XcodebuildBuildFinished", "XcodebuildTestsFinished" },
+			callback = function(event)
+				if event.data.cancelled then
+					return
+				end
+
+				if event.data.success then
+					require("trouble").close()
+				elseif not event.data.failedCount or event.data.failedCount > 0 then
+					if next(vim.fn.getqflist()) then
+						require("trouble").open("quickfix")
+					else
+						require("trouble").close()
+					end
+
+					require("trouble").refresh()
+				end
+			end,
 		})
 	end,
 }
