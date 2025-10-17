@@ -1,4 +1,4 @@
 #!/bin/zsh
-brew install xcode-build-server xcbeautify ruby pipx rg jq coreutils
+brew install xcode-build-server xcbeautify swiftformat swiftlint ruby pipx rg jq coreutils
 gem install xcodeproj
 pipx install pymobiledevice3
