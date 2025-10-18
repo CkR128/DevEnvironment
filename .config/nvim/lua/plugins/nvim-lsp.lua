@@ -131,11 +131,9 @@ return {
 			end,
 		})
 
-		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 		local capabilities = cmp_nvim_lsp.default_capabilities()
-
-		lspconfig["sourcekit"].setup({
+		vim.lsp.config("sourcekit", {
 			cmd = { vim.trim(vim.fn.system("xcrun -f sourcekit-lsp")) },
 			capabilities = capabilities,
 			on_attach = on_attach,
@@ -144,6 +142,7 @@ return {
 				-- more details: https://github.com/neovim/neovim/issues/19237#issuecomment-2237037154
 				client.offset_encoding = "utf-8"
 			end,
+			flags = { debounce_text_changes = 300 },
 		})
 
 		-- Diagnostic Config
