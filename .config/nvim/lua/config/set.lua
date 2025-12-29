@@ -78,7 +78,11 @@ vim.opt.undofile = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
-vim.opt.termguicolors = true
+if vim.env.TERM:match("screen") then
+	vim.opt.termguicolors = false
+else
+	vim.opt.termguicolors = true
+end
 
 vim.opt.scrolloff = 15
 vim.opt.signcolumn = "yes"

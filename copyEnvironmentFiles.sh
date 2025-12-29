@@ -131,3 +131,9 @@ else
     copy_file  ./.tmux-cht-command $HOME
 fi
 
+if echo "screen" | grep -qv "$filter"; then
+    log "Filtering: $filter -- screen"
+else
+    echo "Copying screen"
+    copy_file  ./.config/.screenrc  $HOME
+fi

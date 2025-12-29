@@ -1,4 +1,10 @@
 function ColorMyPencils(color)
+	if vim.env.TERM:match("screen") then
+		vim.opt.termguicolors = false
+		color = color or "solarized"
+		vim.cmd.colorscheme("solarized")
+		return
+	end
 	color = color or "tokyonight-night"
 	vim.cmd.colorscheme(color)
 
@@ -28,6 +34,64 @@ return {
 			-- Like many other themes, this one has different styles, and you could load
 			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
 			vim.cmd.colorscheme("tokyonight-night")
+
+			ColorMyPencils()
+		end,
+	},
+	{
+		"altercation/vim-colors-solarized",
+		lazy = false, -- load immediately
+		config = function()
+			-- Force 256-color mode (important for screen)
+			vim.g.solarized_termcolors = 256
+			vim.g.seoul256_background = 236
+			-- Disable truecolor if inside screen
+			if vim.env.TERM:match("screen") then
+				vim.opt.termguicolors = false
+			else
+				vim.opt.termguicolors = true
+			end
+			-- Set the colorscheme
+
+			ColorMyPencils()
+		end,
+	},
+	{
+		"joshdick/onedark.vim",
+		lazy = false,
+		config = function()
+			if vim.env.TERM:match("screen") then
+				vim.opt.termguicolors = false
+			else
+				vim.opt.termguicolors = true
+			end
+
+			ColorMyPencils()
+		end,
+	},
+	{
+		"junegunn/seoul256.vim",
+		lazy = false,
+		config = function()
+			if vim.env.TERM:match("screen") then
+				vim.opt.termguicolors = false
+			else
+				vim.opt.termguicolors = true
+			end
+
+			ColorMyPencils()
+		end,
+	},
+	{
+		"AlessandroYorba/Alduin",
+		lazy = false,
+		config = function()
+			vim.g.alduin_Shout_Become_Ethereal = 1
+			if vim.env.TERM:match("screen") then
+				vim.opt.termguicolors = false
+			else
+				vim.opt.termguicolors = true
+			end
 
 			ColorMyPencils()
 		end,
