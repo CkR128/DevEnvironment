@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+WINDOW_COUNT=$(screen -Q windows | tr ' ' '\n' | grep '[0-9]' | wc -l)
+if (( WINDOW_COUNT <= 1 )); then
+    screen -t Shell1 2 zsh
+fi
+
+screen -X select 1
+screen -X stuff "nvim .\n"

@@ -1,0 +1,39 @@
+# the following two lines give a two-line status, with the current window highlighted
+hardstatus alwayslastline
+hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%m/%d %{W}%C%A%{g}]'
+
+# huge scrollback buffer
+defscrollback 5000
+
+# no welcome message
+startup_message off
+
+# Use 256-color terminfo
+term screen-256color
+
+# Enable 256 colors
+attrcolor b ".I"
+defbce on
+
+# Allow bold colors to use bright variants
+termcapinfo xterm* ti@:te@
+termcapinfo screen-256color ti@:te@
+
+# mouse tracking allows to switch region focus by clicking
+mousetrack on
+
+# default windows
+#screen -t Shell1  1 bash
+#screen -t Shell2  2 bash
+#screen -t Python  3 python
+#screen -t Media   4 bash
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10                                                            
+screen 1
+
+# Change escape code from ctrl-a to ctrl-b to match tmux binding.
+escape ^Bb
+
+# get rid of silly xoff stuff
+bind s split

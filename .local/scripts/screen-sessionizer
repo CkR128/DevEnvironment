@@ -1,0 +1,70 @@
+#!/usr/bin/env zsh
+ROOT_PATH="$HOME/Developer"
+SCREEN_SESSIONIZER_RC="/tmp/screen-sessionizer-rc"
+
+if [[ ! -d $ROOT_PATH ]]; then
+    echo "Could not find '$ROOT_PATH'"
+    exit 0
+fi
+
+selected=$(find $ROOT_PATH -mindepth 1 -maxdepth 1 -type d |  sed 's|\(.*\)\/\(.*\)|\2|' | fzf)
+if [[ -z "$selected" ]]; then
+    exit 0
+fi
+
+array=()
+# Find from the top level directory and sed off the initial path leaving just selected/subdir1/subdir2(optional)
+find $ROOT_PATH/$selected -mindepth 1 -maxdepth 2 -type d | sed "s|\(.*\)\/\($selected\/.*\)|\2|" >/tmp/tmpfileba
+# Add selected dir as an option.
+echo "$selected/." >> /tmp/tmpfileba
+# FZF over the tmp file to get the selected
+selected_lower=$(cat /tmp/tmpfileba | fzf | sed "s|$selected\/\(.*\)|\1|")
+rm -f /tmp/tmpfileba
+
+if [[ -z "$selected_lower" ]]; then
+    exit 0
+fi
+
+selected="$ROOT_PATH/$selected/$selected_lower"
+
+selected_name=$(basename "$selected" | tr ":,. " "____")
+
+screen_session_exists() {
+    screen -ls | grep -q "[.]$selected_name"
+}
+
+switch_to() {
+    screen -d -r "$selected_name"
+}
+
+if screen_session_exists; then
+    switch_to
+    exit 0
+fi
+
+echo ""
+
+cat "$HOME/.screenrc" > "$SCREEN_SESSIONIZER_RC"
+printf '\n' >> "$SCREEN_SESSIONIZER_RC"
+printf 'stuff "cd '\''%s'\''\\n"\n' "$selected" >> "$SCREEN_SESSIONIZER_RC"
+printf 'stuff "screen -d\\n"\n' >> "$SCREEN_SESSIONIZER_RC"
+printf '\n' >> "$SCREEN_SESSIONIZER_RC"
+
+screen -S "$selected_name" -c "$SCREEN_SESSIONIZER_RC"
+rm "$SCREEN_SESSIONIZER_RC"
+
+# Optional: wait loop (screen usually starts instantly)
+timeout=10
+start_time=$SECONDS
+while ! screen_session_exists; do
+    (( SECONDS - start_time >= timeout )) && {
+        echo "Timeout waiting for screen session '$selected_name'"
+            exit 1
+        }
+    sleep 0.05
+done
+
+# Send command (equivalent to tmux send-keys)
+screen -S "$selected_name" #-X stuff "ready-tmux$(printf '\r')"
+
+# switch_to
