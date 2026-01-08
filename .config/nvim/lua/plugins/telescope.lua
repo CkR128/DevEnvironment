@@ -24,7 +24,23 @@ return { -- Fuzzy Finder (files, lsp, etc)
 	config = function()
 		local setGrepSearch = function()
 			if vim.fn.executable("rg") == 1 then
-				return nil
+				return {
+					"rg",
+					"--follow", -- follow sym links
+					"--hidden", -- seach hidden
+					"--with-filename", -- file path with matched lines
+					"--line-number", --
+					"--column", -- show column number
+					"--smart-case",
+					-- Exclude some patterns
+					"--glob=!**/.git/*",
+					"--glob=!**/.idea/*",
+					"--glob=!**/.vscode/*",
+					"--glob=!**/build/*",
+					"--glob=!**/dist/*",
+					"--glob=!**/yarn.lock",
+					"--glob=!**/package-lock.json",
+				}
 			else
 				return {
 					"grep",
@@ -68,7 +84,24 @@ return { -- Fuzzy Finder (files, lsp, etc)
 			-- You can put your default mappings / updates / etc. in here
 			--  All the info you're looking for is in `:help telescope.setup()`
 			--
-			-- pickers = {}
+			pickers = {
+				find_files = {
+					hidden = true,
+					find_command = {
+						"rg",
+						"--follow", -- follow sym links
+						"--hidden", -- seach hidden
+						-- Exclude some patterns
+						"--glob=!**/.git/*",
+						"--glob=!**/.idea/*",
+						"--glob=!**/.vscode/*",
+						"--glob=!**/build/*",
+						"--glob=!**/dist/*",
+						"--glob=!**/yarn.lock",
+						"--glob=!**/package-lock.json",
+					},
+				},
+			},
 			defaults = {
 				vimgrep_arguments = setGrepSearch(),
 			},
@@ -86,10 +119,13 @@ return { -- Fuzzy Finder (files, lsp, etc)
 		-- See `:help telescope.builtin`
 		local builtin = require("telescope.builtin")
 		local utils = require("telescope.utils")
-		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ile names" })
+		vim.keymap.set("n", "<leader>ff", function()
+			builtin.find_files({ hidden = true, no_ignore = true })
+		end, { desc = "[F]ile names" })
 		vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "By Current [W]ord" })
 		vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[D]iagnostics" })
 		vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "[R]esume Search" })
+		vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
 
 		-- vim.keymap.set("n", "<leader>t.", builtin.oldfiles, { desc = '[T]elescope Recent Files ("." for repeat)' })
 		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Search Open Buffers (By File Name)" })

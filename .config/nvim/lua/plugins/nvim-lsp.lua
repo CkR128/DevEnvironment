@@ -39,7 +39,7 @@ return {
 				map("ga", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
 
 				-- Find references for the word under your cursor.
-				map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+				map("grr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 
 				-- Jump to the implementation of the word under your cursor.
 				--  Useful when your language has ways of declaring types without an actual implementation.
@@ -189,6 +189,7 @@ return {
 		--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
 		--  - settings (table): Override the default settings passed when initializing the server.
 		--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+		local lspconfig = require("lspconfig")
 		local servers = {
 			clangd = {},
 			gopls = {},
@@ -219,6 +220,7 @@ return {
 				},
 			},
 		}
+		lspconfig.sourcekit.setup({})
 
 		-- Ensure the servers and tools above are installed
 		--
