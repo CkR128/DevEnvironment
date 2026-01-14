@@ -44,6 +44,14 @@ if [ ! -d "$HOME/.config" ]; then
     execute mkdir -p "$HOME/.config"
 fi
 
+copy_dir_path() {
+    pushd $1
+    to=$2
+    execute rm -rf $to/* 
+    execute cp -r . $to/
+    popd
+}
+
 copy_dir() {
     pushd $1
     to=$2
@@ -136,4 +144,12 @@ if echo "screen" | grep -qv "$filter"; then
 else
     echo "Copying screen"
     copy_file  ./.config/.screenrc  $HOME
+fi
+
+if echo "sketchybar" | grep -qv "$filter"; then
+    log "Filtering: $filter -- Sketchybar"
+else
+    echo "Copying screen"
+    copy_dir_path ./.config/sketchybar $HOME/.config/sketchybar
+    execute chmod -R u+x $HOME/.config/sketchybar/
 fi
