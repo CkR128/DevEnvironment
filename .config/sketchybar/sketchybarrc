@@ -94,28 +94,28 @@ sketchybar --add item clock_e e \
            label.padding_left=13 \
            icon.padding_left=0
 
-sketchybar --add item clock right \
-    --set clock \
-    icon=􀉉 \
-    icon.padding_left=5 \
-    icon.padding_right=5 \
-    icon.color=0xffffffff \
+# sketchybar --add item clock right \
+#     --set clock \
+#     icon=􀉉 \
+#     icon.padding_left=5 \
+#     icon.padding_right=5 \
+#     icon.color=0xffffffff \
 
 sketchybar --add item battery right \
-    --set battery \
+    --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
     icon=􀛨  \
     icon.padding_left=5 \
     icon.padding_right=5 \
     icon.color=0xffffffff \
-    update_freq=20 \
+    --subscribe battery system_woke power_source_change \
 
 sketchybar --add item volume right \
-    --set volume \
+    --set volume script="$PLUGIN_DIR/volume.sh" \
     icon=􀊩  \
     icon.padding_left=5 \
     icon.padding_right=5 \
     icon.color=0xffffffff \
-    label.drawing=true \
+    --subscribe volume volume_change \
 
 # osascript -e 'quit app "Rectangle"'
 # open -a Rectangle
