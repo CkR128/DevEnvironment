@@ -47,9 +47,9 @@ do
     icon="${SPACE_ICONS[i]}"
     icon.padding_left=7
     icon.padding_right=7
-    background.color=0x40ffffff
-    background.corner_radius=5
-    background.height=25
+    #background.color=0x40ffffff
+    #background.corner_radius=5
+    #background.height=25
     label.drawing=off
     script="$PLUGIN_DIR/space.sh"
     click_script="yabai -m space --focus $sid"
@@ -61,12 +61,12 @@ sketchybar --add item front_app.separator left \
            --set front_app.separator \
            background.color=0x00000000 \
            background.padding_left=3 \
-           icon=">" \
+           icon="|" \
            icon.color=0xffffffff \
            icon.font="$FONT_FACE:Bold:20.0" \
            icon.padding_left=0 \
            icon.padding_right=0 \
-           icon.y_offset=1.5 \
+           icon.y_offset=-1.5 \
            label.drawing=no \
            --add item front_app left \
            --set front_app \
@@ -96,14 +96,14 @@ sketchybar --add item clock_e e \
 
 sketchybar --add item clock right \
     --set clock \
-    icon=󰃰 \
+    icon=􀉉 \
     icon.padding_left=5 \
     icon.padding_right=5 \
     icon.color=0xffffffff \
 
 sketchybar --add item battery right \
     --set battery \
-    icon=󰃰 \
+    icon=􀛨  \
     icon.padding_left=5 \
     icon.padding_right=5 \
     icon.color=0xffffffff \
@@ -111,7 +111,7 @@ sketchybar --add item battery right \
 
 sketchybar --add item volume right \
     --set volume \
-    icon=󰃰 \
+    icon=􀊩  \
     icon.padding_left=5 \
     icon.padding_right=5 \
     icon.color=0xffffffff \
