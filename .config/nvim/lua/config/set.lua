@@ -53,9 +53,6 @@ vim.opt.sidescrolloff = 30
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
-vim.opt.nu = true
-vim.opt.relativenumber = true
-
 -- Enable mouse mode, can be useful for resizing splits for example!
 
 vim.opt.mouse = "a"
@@ -68,6 +65,17 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
+
+vim.opt.nu = true
+vim.opt.relativenumber = true
+-- If launched in "Skitty" mode, change these settings.
+-- This is for the sticky note panel idea taken from linkarzu online.
+if vim.g.neovim_mode == "skitty" then
+	vim.opt.number = false
+	vim.opt.relativenumber = false
+	vim.opt.textwidth = 25
+	vim.opt.wrap = false
+end
 
 vim.opt.swapfile = false
 vim.opt.backup = false

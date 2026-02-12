@@ -1,4 +1,12 @@
--- require("config.lazy")
+vim.g.neovim_mode = vim.env.NEOVIM_MODE or "default"
+if vim.g.neovim_mode == "skitty" then
+	vim.wait(500, function()
+		return false
+	end)
+	-- wait for X miliseconds without doing anything.
+	-- Supposed to prevent an issue if loading skitty immediately.
+end
+
 require("config.set")
 require("config.remap")
 
