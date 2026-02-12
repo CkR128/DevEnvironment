@@ -21,6 +21,12 @@ vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "[D]elete to null-reg"
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "[Y]ank to Clipboard" })
 vim.keymap.set({ "n" }, "<leader>Y", '"+Y', { desc = "[Y]ank Line to Clipboard" })
 
+vim.keymap.set({ "n" }, "<leader>pp", function()
+	local buffer_name = vim.api.nvim_buf_get_name(0)
+	local full_path = vim.fn.fnamemodify(buffer_name, ":p")
+	vim.notify(full_path)
+end, { desc = "[P]rint full file [P]ath" })
+
 vim.keymap.set("n", "Q", "<nop>")
 
 local function is_in_tmux()
