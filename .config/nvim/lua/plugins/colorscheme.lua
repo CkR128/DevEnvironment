@@ -2,10 +2,10 @@ function ColorMyPencils(color)
 	if vim.env.TERM:match("screen") then
 		vim.opt.termguicolors = false
 		color = color or "solarized"
-		vim.cmd.colorscheme("solarized")
+		vim.cmd.colorscheme("xcode")
 		return
 	end
-	color = color or "tokyonight-night"
+	color = color or "xcode"
 	vim.cmd.colorscheme(color)
 
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
@@ -96,4 +96,5 @@ return {
 			ColorMyPencils()
 		end,
 	},
+	{ "lunacookies/vim-colors-xcode" },
 }
