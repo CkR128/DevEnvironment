@@ -1,11 +1,11 @@
 function ColorMyPencils(color)
 	if vim.env.TERM:match("screen") then
 		vim.opt.termguicolors = false
-		color = color or "solarized"
-		vim.cmd.colorscheme("xcode")
+		color = color or "xcodedark"
+		vim.cmd.colorscheme(color)
 		return
 	end
-	color = color or "xcode"
+	color = color or "xcodedark"
 	vim.cmd.colorscheme(color)
 
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
