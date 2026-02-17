@@ -28,5 +28,17 @@ require("lazy").setup({
 	},
 }, {})
 
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "swift" },
+	callback = function()
+		vim.treesitter.start()
+		vim.api.nvim_set_hl(0, "@declaration.other", { fg = "#69AEC8" })
+		vim.api.nvim_set_hl(0, "@other.type_name", { fg = "#D5BBFA" }) -- 213,187,250
+		vim.api.nvim_set_hl(0, "@project.properties", { fg = "#89C0B3" })
+		vim.api.nvim_set_hl(0, "@type.primitive", { fg = "#D5BBFA" }) -- 213,187,250
+		vim.api.nvim_set_hl(0, "@type.swiftui", { fg = "#D5BBFA" }) -- 213,187,250
+		vim.api.nvim_set_hl(0, "@member.definition", { fg = "#69AEC8" }) -- 105,174,200
+	end,
+})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
