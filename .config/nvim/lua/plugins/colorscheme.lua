@@ -116,6 +116,33 @@ return {
 					blink = true,
 				},
 				terminal_colors = true,
+				color_overrides = {
+					bg = AppleColors.background, -- New background color
+					keyword = AppleColors.keywords, -- Keywords (var, let, if, class, func) - Pink
+					string = AppleColors.strings, -- String literals - Coral red
+					comment = AppleColors.comments, -- Comments - Muted gray
+					number = AppleColors.characters_numbers, -- Numbers and numeric literals - Warm yellow
+					boolean = AppleColors.keywords, -- Booleans (true, false) - Same as keywords
+					function_name = AppleColors.other_Declaration, -- Function names and calls - Green (more accurate)
+					variable = AppleColors.plain_Text, -- Variables and identifiers - White: 223, 223, 224
+					constant = AppleColors.other_Function_Method_Constants_Properties_Globals, -- Constants - Light blue (not yellow)
+					type = AppleColors.type_Declaration, -- Types and classes - Light blue
+					property = AppleColors.project_Function_Method_Constants_Properties_Globals, -- Object properties - Green #89C0B3, Blue #69AEC8
+					parameter = AppleColors.other_Declaration, -- Function parameters - Lighter, easier on the eyes purple
+					preprocessor = AppleColors.keywords, -- Preprocessor directives, imports - Pink like keywords
+					attribute = AppleColors.attributes, -- Attributes and decorators - Orange
+					operator = AppleColors.math_operators, -- Operators (+, -, =, etc.) - White
+					punctuation = AppleColors.plain_Text, -- Punctuation marks - White
+
+					-- Swift/Objective-C specific
+					swift_attribute = AppleColors.keywords, -- @objc, @available, etc.
+					objc_directive = AppleColors.keywords, -- #pragma, #import - Pink like keywords
+
+					-- UI Elements (Updated)
+					cursor = AppleColors.cursor, -- New cursor color Blue
+					cursor_line = AppleColors.current_line, -- Current line highlight
+					selection = AppleColors.selection, -- New selection background color (matches keyword)
+				},
 			})
 			vim.cmd.colorscheme("xcodedark")
 		end,
