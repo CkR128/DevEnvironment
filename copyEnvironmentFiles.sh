@@ -153,3 +153,10 @@ else
     copy_dir_path ./.config/sketchybar $HOME/.config/sketchybar
     execute chmod -R u+x $HOME/.config/sketchybar/
 fi
+
+if echo "aerospace" | grep -qv "$filter"; then
+    log "Filtering: $filter -- aerospace"
+else
+    echo "Copying screen"
+    copy_dir_path ./.config/aerospace $HOME/.config/aerospace
+fi
