@@ -1,3 +1,58 @@
+local h_pct = 0.90
+local w_pct = 0.80
+local w_limit = 75
+local standard_setup = {
+	borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+	preview = { hide_on_startup = true },
+	layout_strategy = "vertical",
+	layout_config = {
+		vertical = {
+			mirror = true,
+			prompt_position = "top",
+			width = function(_, cols, _)
+				return math.min(math.floor(w_pct * cols), w_limit)
+			end,
+			height = function(_, _, rows)
+				return math.floor(rows * h_pct)
+			end,
+			preview_cutoff = 10,
+			preview_height = 0.4,
+		},
+	},
+}
+local fullscreen_setup = {
+	borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+	preview = { hide_on_startup = false },
+	layout_strategy = "flex",
+	layout_config = {
+		flex = { flip_columns = 100 },
+		horizontal = {
+			mirror = false,
+			prompt_position = "top",
+			width = function(_, cols, _)
+				return math.floor(cols * w_pct)
+			end,
+			height = function(_, _, rows)
+				return math.floor(rows * h_pct)
+			end,
+			preview_cutoff = 10,
+			preview_width = 0.5,
+		},
+		vertical = {
+			mirror = true,
+			prompt_position = "top",
+			width = function(_, cols, _)
+				return math.floor(cols * w_pct)
+			end,
+			height = function(_, _, rows)
+				return math.floor(rows * h_pct)
+			end,
+			preview_cutoff = 10,
+			preview_height = 0.5,
+		},
+	},
+}
+
 return { -- Fuzzy Finder (files, lsp, etc)
 	"nvim-telescope/telescope.nvim",
 	event = "VimEnter",
@@ -22,9 +77,31 @@ return { -- Fuzzy Finder (files, lsp, etc)
 		{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
 	},
 	config = function()
-		local setGrepSearch = function()
-			if vim.fn.executable("rg") == 1 then
-				return {
+		require("telescope").setup({
+			pickers = {
+				find_files = {
+					find_command = {
+						"fd",
+						"--type",
+						"f",
+						"-H",
+						"--strip-cwd-prefix",
+					},
+				},
+			},
+			defaults = vim.tbl_extend("error", fullscreen_setup, {
+				sorting_strategy = "ascending",
+				path_display = { "filename_first" },
+				mappings = {
+					n = {
+						["o"] = require("telescope.actions.layout").toggle_preview,
+						["<C-c>"] = require("telescope.actions").close,
+					},
+					i = {
+						["<C-o>"] = require("telescope.actions.layout").toggle_preview,
+					},
+				},
+				vimgrep_arguments = {
 					"rg",
 					"--follow", -- follow sym links
 					"--hidden", -- seach hidden
@@ -40,71 +117,8 @@ return { -- Fuzzy Finder (files, lsp, etc)
 					"--glob=!**/dist/*",
 					"--glob=!**/yarn.lock",
 					"--glob=!**/package-lock.json",
-				}
-			else
-				return {
-					"grep",
-					"--extended-regexp",
-					"--color=never",
-					"--with-filename",
-					"--line-number",
-					"-b",
-					"--ignore-case",
-					"--recursive",
-					"--no-messages",
-					"--exclude-dir=*cache*",
-					"--exclude-dir=.git",
-					"--exclude=.*",
-					"--binary-files=without-match",
-				}
-			end
-		end
-		-- Telescope is a fuzzy finder that comes with a lot of different things that
-		-- it can fuzzy find! It's more than just a "file finder", it can search
-		-- many different aspects of Neovim, your workspace, LSP, and more!
-		--
-		-- The easiest way to use Telescope, is to start by doing something like:
-		--  :Telescope help_tags
-		--
-		-- After running this command, a window will open up and you're able to
-		-- type in the prompt window. You'll see a list of `help_tags` options and
-		-- a corresponding preview of the help.
-		--
-		-- Two important keymaps to use while in Telescope are:
-		--  - Insert mode: <c-/>
-		--  - Normal mode: ?
-		--
-		-- This opens a window that shows you all of the keymaps for the current
-		-- Telescope picker. This is really useful to discover what Telescope can
-		-- do as well as how to actually do it!
-
-		-- [[ Configure Telescope ]]
-		-- See `:help telescope` and `:help telescope.setup()`
-		require("telescope").setup({
-			-- You can put your default mappings / updates / etc. in here
-			--  All the info you're looking for is in `:help telescope.setup()`
-			--
-			pickers = {
-				find_files = {
-					hidden = true,
-					find_command = {
-						"rg",
-						"--follow", -- follow sym links
-						"--hidden", -- seach hidden
-						-- Exclude some patterns
-						"--glob=!**/.git/*",
-						"--glob=!**/.idea/*",
-						"--glob=!**/.vscode/*",
-						"--glob=!**/build/*",
-						"--glob=!**/dist/*",
-						"--glob=!**/yarn.lock",
-						"--glob=!**/package-lock.json",
-					},
 				},
-			},
-			defaults = {
-				vimgrep_arguments = setGrepSearch(),
-			},
+			}),
 			extensions = {
 				["ui-select"] = {
 					require("telescope.themes").get_dropdown(),
@@ -119,24 +133,25 @@ return { -- Fuzzy Finder (files, lsp, etc)
 		-- See `:help telescope.builtin`
 		local builtin = require("telescope.builtin")
 		local utils = require("telescope.utils")
+		-- Find Files by name
 		vim.keymap.set("n", "<leader>ff", function()
-			builtin.find_files({ hidden = true, no_ignore = true })
+			builtin.find_files({ hidden = true })
 		end, { desc = "[F]ile names" })
+		-- Search word under cursor across project
 		vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "By Current [W]ord" })
+		-- Search diagnostics for project
 		vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[D]iagnostics" })
+		-- Resume previous search
 		vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "[R]esume Search" })
+		-- Live Grep in project. TODO: Update this to use the advanced live grep to filter by directory as well.
 		vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
-
-		-- vim.keymap.set("n", "<leader>t.", builtin.oldfiles, { desc = '[T]elescope Recent Files ("." for repeat)' })
-		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Search Open Buffers (By File Name)" })
+		-- Search open buffers by name
+		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Open Buffers (File Names)" })
 
 		-- Slightly advanced example of overriding default behavior and theme
 		vim.keymap.set("n", "<leader>/", function()
 			-- You can pass additional configuration to Telescope to change the theme, layout, etc.
-			builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-				winblend = 10,
-				previewer = false,
-			}))
+			builtin.current_buffer_fuzzy_find()
 		end, { desc = "Current buffer" })
 
 		-- It's also possible to pass additional configuration options.
@@ -147,27 +162,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
 				prompt_title = "Live Grep in Open Files",
 			})
 		end, { desc = "In Open Files" })
-
-		vim.keymap.set("n", "<leader>fc", function()
-			builtin.live_grep({ search_dirs = { utils.buffer_dir() } })
-		end, { desc = "In [C]urrent File's Directory" })
-
-		local searchDirectory = utils.buffer_dir()
-		vim.keymap.set("n", "<leader>f<C-t>", function()
-			searchDirectory = utils.buffer_dir()
-		end, { desc = "Set Search Directory" })
-		vim.keymap.set("n", "<leader>ft", function()
-			builtin.live_grep({
-				search_dirs = { searchDirectory },
-				prompt_title = "Grep in Set Directory",
-			})
-		end, { desc = "Search Recorded Directory" })
-		vim.api.nvim_create_autocmd("VimEnter", {
-			group = vim.api.nvim_create_augroup("Telescope-Custom", { clear = true }),
-			callback = function()
-				searchDirectory = utils.buffer_dir()
-			end,
-		})
 
 		vim.keymap.set("n", "<leader>fnh", builtin.help_tags, { desc = "Nvim [H]elp" })
 		vim.keymap.set("n", "<leader>fnk", builtin.keymaps, { desc = "Nvim [K]eymaps" })
